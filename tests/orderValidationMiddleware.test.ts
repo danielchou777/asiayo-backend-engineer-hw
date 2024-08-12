@@ -36,16 +36,13 @@ describe('ValidationMiddleware', () => {
   // Successful Case
   it('should pass validation with correct data', async () => {
     await executeMiddleware();
-
     expect(next).toHaveBeenCalled();
   });
 
   // Failed Cases
   it('should return 400 if a required field is missing', async () => {
     delete req.body!.name;
-
     await executeMiddleware();
-
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({ errors: expect.any(Array) })
@@ -54,9 +51,43 @@ describe('ValidationMiddleware', () => {
 
   it('should return 400 if address is missing a field', async () => {
     delete req.body!.address!.street;
-
     await executeMiddleware();
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ errors: expect.any(Array) })
+    );
+  });
 
+  it('should return 400 if name contains only whitespace', async () => {
+    req.body!.name = '   ';
+    await executeMiddleware();
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ errors: expect.any(Array) })
+    );
+  });
+
+  it('should return 400 if city contains only whitespace', async () => {
+    req.body!.address!.city = '   ';
+    await executeMiddleware();
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ errors: expect.any(Array) })
+    );
+  });
+
+  it('should return 400 if district contains only whitespace', async () => {
+    req.body!.address!.district = '   ';
+    await executeMiddleware();
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({ errors: expect.any(Array) })
+    );
+  });
+
+  it('should return 400 if street contains only whitespace', async () => {
+    req.body!.address!.street = '   ';
+    await executeMiddleware();
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({ errors: expect.any(Array) })

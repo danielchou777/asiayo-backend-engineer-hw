@@ -1,11 +1,21 @@
 import { OrderService } from '../src/services/orderService';
 import { Order } from '../src/models/order';
+import {
+  NameValidationStrategy,
+  PriceValidationStrategy,
+  CurrencyValidationStrategy,
+} from '../src/services/orderStrategies';
 
 describe('OrderService', () => {
   let orderService: OrderService;
+  const validationStrategies = [
+    new NameValidationStrategy(),
+    new PriceValidationStrategy(),
+    new CurrencyValidationStrategy(),
+  ];
 
   beforeEach(() => {
-    orderService = new OrderService();
+    orderService = new OrderService(validationStrategies);
   });
 
   // Successful Cases
@@ -63,7 +73,7 @@ describe('OrderService', () => {
 
   it('should throw an error if the name is not capitalized', () => {
     const order: Order = {
-      id: 'A0000006',
+      id: 'A0000004',
       name: 'melody Holiday Inn',
       address: {
         city: 'taipei-city',
@@ -81,7 +91,7 @@ describe('OrderService', () => {
   // Price field errors
   it('should throw an error if price is not a number', () => {
     const order: Order = {
-      id: 'A0000004',
+      id: 'A0000005',
       name: 'Melody Holiday Inn',
       address: {
         city: 'taipei-city',
@@ -98,7 +108,7 @@ describe('OrderService', () => {
 
   it('should throw an error if price exceeds 2000', () => {
     const order: Order = {
-      id: 'A0000004',
+      id: 'A0000006',
       name: 'Melody Holiday Inn',
       address: {
         city: 'taipei-city',
@@ -115,7 +125,7 @@ describe('OrderService', () => {
 
   it('should throw an error if price is less than 0', () => {
     const order: Order = {
-      id: 'A0000005',
+      id: 'A0000007',
       name: 'Melody Holiday Inn',
       address: {
         city: 'taipei-city',
@@ -133,7 +143,7 @@ describe('OrderService', () => {
   // Currency field errors
   it('should throw an error if currency is neither TWD nor USD', () => {
     const order: Order = {
-      id: 'A0000005',
+      id: 'A0000008',
       name: 'Melody Holiday Inn',
       address: {
         city: 'taipei-city',

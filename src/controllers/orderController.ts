@@ -1,8 +1,19 @@
 import { Request, Response } from 'express';
 import { OrderService } from '../services/orderService.js';
+import {
+  NameValidationStrategy,
+  PriceValidationStrategy,
+  CurrencyValidationStrategy,
+} from '../services/orderStrategies/index.js';
 
 export const createOrder = (req: Request, res: Response) => {
-  const orderService = new OrderService();
+  const validationStrategies = [
+    new NameValidationStrategy(),
+    new PriceValidationStrategy(),
+    new CurrencyValidationStrategy(),
+  ];
+
+  const orderService = new OrderService(validationStrategies);
 
   try {
     const result = orderService.processOrder(req.body);
