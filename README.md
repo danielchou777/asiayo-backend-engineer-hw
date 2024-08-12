@@ -26,7 +26,7 @@ $ npm test
 $ docker-compose build
 ```
 
-2. Start docker containers:
+2. Start docker container
 ```
 $ docker-compose up
 ```
